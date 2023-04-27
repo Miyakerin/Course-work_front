@@ -21,9 +21,9 @@ public class AnyLoginController {
     TextField email;
     @FXML
     TextField pass;
-    private Token token;
+    private static Token token;
 
-    public Token getToken() {
+    public static Token getToken() {
         return token;
     }
 
@@ -31,7 +31,7 @@ public class AnyLoginController {
     public void onRegisterButtonClick(ActionEvent actionEvent) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("any/any_register_page.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 400, 600);
+            Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();
             stage.setTitle("register");
             stage.setScene(scene);
@@ -61,7 +61,7 @@ public class AnyLoginController {
             if (response.code() != 200) {
                 throw new IOException();
             }
-            token = new Gson().fromJson(response_token, Token.class);
+            this.token = new Gson().fromJson(response_token, Token.class);
 
             request = new Request.Builder()
                     .url("http://localhost:8080/api/user/me/info")
@@ -74,7 +74,7 @@ public class AnyLoginController {
             User user = new Gson().fromJson(response.body().string(), User.class);
             if (user.role.equals("ADMIN")) {
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("admin/admin_page.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 800, 1200);
+                Scene scene = new Scene(fxmlLoader.load());
                 Stage stage = new Stage();
                 stage.setTitle("admin_page");
                 stage.setScene(scene);
@@ -83,7 +83,7 @@ public class AnyLoginController {
             }
             if (user.role.equals("USER")) {
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("user/user_page.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+                Scene scene = new Scene(fxmlLoader.load());
                 Stage stage = new Stage();
                 stage.setTitle("user_page");
                 stage.setScene(scene);
@@ -92,7 +92,7 @@ public class AnyLoginController {
             }
             if (user.role.equals("EMPLOYEE")) {
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("employee/employee_page.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 800, 1200);
+                Scene scene = new Scene(fxmlLoader.load());
                 Stage stage = new Stage();
                 stage.setTitle("employee_page");
                 stage.setScene(scene);

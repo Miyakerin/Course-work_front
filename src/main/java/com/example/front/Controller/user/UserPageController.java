@@ -134,10 +134,6 @@ public class UserPageController {
         }
     }
 
-    public void systemtest(ActionEvent actionEvent) {
-        System.out.println(user);
-    }
-
     public void logoutButtonClickAction(ActionEvent actionEvent) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("any/any_login_page.fxml"));

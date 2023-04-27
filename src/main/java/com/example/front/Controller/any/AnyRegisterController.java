@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import okhttp3.*;
 
+import java.io.IOException;
+
 public class AnyRegisterController {
     @FXML
     public TextField firstName;
@@ -50,6 +52,20 @@ public class AnyRegisterController {
             stage.show();
             ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
         }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void logoutButtonClickAction(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("any/any_login_page.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+            Stage stage = new Stage();
+            stage.setTitle("login");
+            stage.setScene(scene);
+            stage.show();
+            ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
