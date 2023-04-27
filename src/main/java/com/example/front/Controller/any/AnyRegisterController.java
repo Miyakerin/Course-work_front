@@ -35,7 +35,6 @@ public class AnyRegisterController {
                     "\"password\": " + "\"" + password.getText() + "\"," +
                     "\"age\": " + age.getText() +
                             "}";
-            System.out.println(json);
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), json);
             Request request = new Request.Builder()
                     .url(url)

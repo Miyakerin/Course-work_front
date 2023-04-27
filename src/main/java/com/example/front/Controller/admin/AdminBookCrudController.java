@@ -9,15 +9,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import okhttp3.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminBookCrudController {
+public class AdminBookCrudController { //todo add "back" button
     @FXML
     public TableView<Book> table;
     @FXML
@@ -54,7 +58,6 @@ public class AdminBookCrudController {
     public TextField loanerId_post;
 
     private String token;
-    private User user;
 
     @FXML
     private void initialize() {
@@ -105,26 +108,29 @@ public class AdminBookCrudController {
         }
     }
     public void findByIdAction(ActionEvent actionEvent) throws IOException {
+        try {
+            String url = "http://localhost:8080/api/employee/books/get/" + findId.getText();
+            OkHttpClient client = new OkHttpClient().newBuilder().build();
 
-        String url = "http://localhost:8080/api/employee/books/get/" + findId.getText();
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Authorization", "Bearer " + token)
+                    .get().build();
+            Call call = client.newCall(request);
+            Response response = call.execute();
+            com.example.front.json.Book book = new Gson().fromJson(response.body().string(), com.example.front.json.Book.class);
 
-        Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer " + token)
-                .get().build();
-        Call call = client.newCall(request);
-        Response response = call.execute();
-        com.example.front.json.Book book = new Gson().fromJson(response.body().string(), com.example.front.json.Book.class);
-
-        id_find.setText(Long.toString(book.id));
-        name_find.setText(book.name);
-        author_find.setText(book.author);
-        genre_find.setText(book.genre);
-        description_find.setText(book.description);
-        condition_find.setText(book.condition);
-        age_restrict_find.setText(Integer.toString(book.ageRestriction));
+            id_find.setText(Long.toString(book.id));
+            name_find.setText(book.name);
+            author_find.setText(book.author);
+            genre_find.setText(book.genre);
+            description_find.setText(book.description);
+            condition_find.setText(book.condition);
+            age_restrict_find.setText(Integer.toString(book.ageRestriction));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -213,6 +219,20 @@ public class AdminBookCrudController {
                 table.setItems(observableListBooks);
             }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void logoutButtonAction(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("admin/admin_page.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setTitle("admin page");
+            stage.setScene(scene);
+            stage.show();
+            ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {
             e.printStackTrace();
         }
